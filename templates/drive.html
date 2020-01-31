@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>Art Camp Combinations Drive</title>
+  </head>
+
+  <body>
+    <h1>Art Camp Combinations Drive</h1>
+
+    <h3>Upload:</h3>
+    <form method="POST" action="/upload" enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+
+    <section>
+      <h3>Files:</h3>
+      <ul>
+        {% for item in contents %}
+          <li>
+            {{ item.Key }}
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  </body>
+</html>
