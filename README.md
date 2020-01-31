@@ -4,7 +4,4 @@
 
 ### Built with
 
-Flask -> SQLite
-|
-v
-S3
+Flask -> S3 -> SQLite
