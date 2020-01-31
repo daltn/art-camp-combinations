@@ -1,6 +1,6 @@
 # Art Camp Combinations
 
-## Randomized art combos
+t combos
 
 ### Built with
 
