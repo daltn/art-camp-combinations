@@ -1,8 +1,20 @@
 import os
 from flask import Flask, request, redirect, render_template
 from s3 import upload_file, list_files
+from flask_sqlalchemy import SQLAlchemy
+
 
 app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////db/art.sqlite'
+db = SQLAlchemy(app)
+
+class Art(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    link = db.Column(db.String(120), unique=True, nullable=False)
+    title = db.Column(db.String(120), unique=True, nullable=False)
+    artist = db.Column(db.String(120), unique=False, nullable=False)
+
 
 UPLOAD_DIR = "uploads"
 BUCKET = 's3-bucket-name-here'
