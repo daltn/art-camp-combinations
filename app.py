@@ -37,6 +37,11 @@ def index(url, title, artist):
 
     return '<h1>Added new art piece</h1>'
 
+@app.route('/<title>')
+def get_art(title):
+    art = Art.query.filter_by(title=title).first()
+
+    return f'<h1>The art happens { art.artist }</h1>'
 
 @app.route('/upload', methods=['POST'])
 def upload():
