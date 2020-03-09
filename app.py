@@ -3,6 +3,7 @@ from flask import Flask, request, redirect, render_template
 from s3 import upload_file, list_files
 from flask_sqlalchemy import SQLAlchemy
 import sqlite3
+import boto3
 from datetime import datetime
 
 app = Flask(__name__)
@@ -13,6 +14,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/daltonsaffe/devel/art-
 
 db = SQLAlchemy(app)
 
+
 class Art(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.String(120), unique=True, nullable=False)
@@ -22,12 +24,13 @@ class Art(db.Model):
 
 
 UPLOAD_DIR = "uploads"
-BUCKET = 's3-bucket-name-here'
+BUCKET = 'art-camp-library'
 
 
 @app.route('/')
 def hello_world():
     return '<h1>Hello, World!</h1>'
+
 
 @app.route('/<url>/<title>/<artist>')
 def index(url, title, artist):
@@ -37,20 +40,21 @@ def index(url, title, artist):
 
     return '<h1>Added new art piece</h1>'
 
+
 @app.route('/<title>')
 def get_art(title):
     art = Art.query.filter_by(title=title).first()
 
     return f'<h1>The art happens { art.artist }</h1>'
 
+
 @app.route('/upload', methods=['POST'])
 def upload():
-    if request.method == "POST":
-        f = request.files['file']
-        f.save(os.path.join(UPLOAD_DIR, f.filename))
-        upload_file(f"uploads/{f.filename}", BUCKET)
+    s3 = boto3.resource('s3')
 
-        return "<h1>Sweet, you uploaded the file!</h1>"
+    s3.Bucket(BUCKET).put_object(Key='testing.png',
+                                 Body=request.files['fileUpoad'])
+    return '<h1>File Uploaded - nice!!</h1>'
 
 
 @app.route('/drive')
